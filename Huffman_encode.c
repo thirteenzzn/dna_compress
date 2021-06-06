@@ -1,26 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAXVALUE  1000          //ÊäÈëÎÄ±¾×î´ó×Ö·û¸öÊı
-#define MAXLEAF   256           //×î´óÒ¶½áµã¸öÊı£¬¼´×î´ó²»Í¬×Ö·û¸öÊı
-#define MAXBIT    MAXLEAF-1     //±àÂë×î´ó³¤¶È
-#define MAXNODE   MAXLEAF*2-1   //×î´ó½áµã¸öÊı
+#define MAXVALUE  1000          //è¾“å…¥æ–‡æœ¬æœ€å¤§å­—ç¬¦ä¸ªæ•°
+#define MAXLEAF   256           //æœ€å¤§å¶ç»“ç‚¹ä¸ªæ•°ï¼Œå³æœ€å¤§ä¸åŒå­—ç¬¦ä¸ªæ•°
+#define MAXBIT    MAXLEAF-1     //ç¼–ç æœ€å¤§é•¿åº¦
+#define MAXNODE   MAXLEAF*2-1   //æœ€å¤§ç»“ç‚¹ä¸ªæ•°
 
-typedef struct{        //HuffmanÊ÷½áµã½á¹¹Ìå
-    float weight;      //½áµãÈ¨Öµ£¬ÕâÀïÊÇ×Ö·û³öÏÖµÄÆµÂÊ£¬¼°Æµ´Î/×Ö·ûÖÖÀàÊı
-    int parent;        //¸¸½áµãÎ»ÖÃË÷Òı£¬³õÊ¼-1
-    int lchild;        //×óº¢×ÓÎ»ÖÃË÷Òı£¬³õÊ¼-1
-    int rchild;        //ÓÒº¢×ÓÎ»ÖÃË÷Òı£¬³õÊ¼-1
+typedef struct{        //Huffmanæ ‘ç»“ç‚¹ç»“æ„ä½“
+    float weight;      //ç»“ç‚¹æƒå€¼ï¼Œè¿™é‡Œæ˜¯å­—ç¬¦å‡ºç°çš„é¢‘ç‡ï¼ŒåŠé¢‘æ¬¡/å­—ç¬¦ç§ç±»æ•°
+    int parent;        //çˆ¶ç»“ç‚¹ä½ç½®ç´¢å¼•ï¼Œåˆå§‹-1
+    int lchild;        //å·¦å­©å­ä½ç½®ç´¢å¼•ï¼Œåˆå§‹-1
+    int rchild;        //å³å­©å­ä½ç½®ç´¢å¼•ï¼Œåˆå§‹-1
 } HNodeType;
 
-typedef struct{        //Huffman±àÂë½á¹¹Ìå
-    int bit[MAXBIT];   //×Ö·ûµÄ¹ş·òÂü±àÂë
-    int start;         //¸Ã±àÂëÔÚÊı×ébitÖĞµÄ¿ªÊ¼Î»ÖÃ
+typedef struct{        //Huffmanç¼–ç ç»“æ„ä½“
+    int bit[MAXBIT];   //å­—ç¬¦çš„å“ˆå¤«æ›¼ç¼–ç 
+    int start;         //è¯¥ç¼–ç åœ¨æ•°ç»„bitä¸­çš„å¼€å§‹ä½ç½®
 } HCodeType;
 
 int TextStatistics(char text[],float weight[]) {
-    //Í³¼ÆÃ¿ÖÖ×Ö·ûµÄ³öÏÖÆµ´Î£¬·µ»Ø³öÏÖµÄ²»Í¬×Ö·ûµÄ¸öÊı
-    //³öÏÖµÄ×Ö·û´æ·ÅÔÚchÖĞ£¬¶ÔÓ¦×Ö·ûµÄ³öÏÖÆµ´Î´æ·ÅÔÚweightÖĞ
+    //ç»Ÿè®¡æ¯ç§å­—ç¬¦çš„å‡ºç°é¢‘æ¬¡ï¼Œè¿”å›å‡ºç°çš„ä¸åŒå­—ç¬¦çš„ä¸ªæ•°
+    //å‡ºç°çš„å­—ç¬¦å­˜æ”¾åœ¨chä¸­ï¼Œå¯¹åº”å­—ç¬¦çš„å‡ºç°é¢‘æ¬¡å­˜æ”¾åœ¨weightä¸­
 	int i;
 
 	for(i=0;i<strlen(text);i++)
@@ -36,37 +36,37 @@ int TextStatistics(char text[],float weight[]) {
         else
             weight[4]+=1;
     }
-	//¸ù¾İÆµÊı¼ÆËãÆµÂÊ
+	//æ ¹æ®é¢‘æ•°è®¡ç®—é¢‘ç‡
 	int index=0;
 	while(weight[index]!=0){
 		weight[index]/=strlen(text);
 		index++;
 	}
-	//×îÖÕ ch_indexµÄÖµ¼´Îªtext×Ö·û´®ÖĞ²»Í¬×Ö·ûµÄ¸öÊı
+	//æœ€ç»ˆ ch_indexçš„å€¼å³ä¸ºtextå­—ç¬¦ä¸²ä¸­ä¸åŒå­—ç¬¦çš„ä¸ªæ•°
 	return 5;
 }
 
-// ´Ó HuffNodes[0..range]ÖĞ£¬ÕÒµ½×îĞ¡µÄ½áµãË÷Òı¸³¸øs1,s2 ¡£ÒÑ¾­ÕÒµ½¹ıµÄ½áµãË÷Òı±»´¢´æÔÚout[]ÖĞ
+// ä» HuffNodes[0..range]ä¸­ï¼Œæ‰¾åˆ°æœ€å°çš„ç»“ç‚¹ç´¢å¼•èµ‹ç»™s1,s2 ã€‚å·²ç»æ‰¾åˆ°è¿‡çš„ç»“ç‚¹ç´¢å¼•è¢«å‚¨å­˜åœ¨out[]ä¸­
 void select(HNodeType HuffNodes[],int range,int *s1,int *s2){
-	//ÏÈÕÒµÚÒ»¸ö×îĞ¡Öµ ¡£
+	//å…ˆæ‰¾ç¬¬ä¸€ä¸ªæœ€å°å€¼ ã€‚
 	float min1 = 5;
     int index1;
 	for(index1=0;index1<=range;index1++){
 
 		if(HuffNodes[index1].weight < min1 && HuffNodes[index1].parent ==-1){
-			//ÅĞ¶Ï¸Ã½áµãÊÇ·ñ±»Ñ¡¹ı¡£Èç¹û¸Ã½áµãparentÎª0£¬ÔòÆäÎª±»Ñ¡
+			//åˆ¤æ–­è¯¥ç»“ç‚¹æ˜¯å¦è¢«é€‰è¿‡ã€‚å¦‚æœè¯¥ç»“ç‚¹parentä¸º0ï¼Œåˆ™å…¶ä¸ºè¢«é€‰
 				min1 = HuffNodes[index1].weight;
 				*s1 = index1 ;
 		}
 	}
 
 
-	//ÕÒµÚ2¸ö×îĞ¡Öµ
+	//æ‰¾ç¬¬2ä¸ªæœ€å°å€¼
 	float min2 = 5;
 	int index2;
 	for(index2=0;index2<=range ;index2++){
 		if(HuffNodes[index2].weight < min2 && HuffNodes[index2].parent ==-1 && index2!=*s1){
-			//ÅĞ¶Ï¸Ã½áµãÊÇ·ñ±»Ñ¡¹ı¡£»¹ÒªÅĞ¶ÏÆäÊÇ·ñ±»s1Ñ¡ÁË
+			//åˆ¤æ–­è¯¥ç»“ç‚¹æ˜¯å¦è¢«é€‰è¿‡ã€‚è¿˜è¦åˆ¤æ–­å…¶æ˜¯å¦è¢«s1é€‰äº†
 				min2 = HuffNodes[index2].weight;
 				*s2 = index2 ;
 		}
@@ -74,19 +74,19 @@ void select(HNodeType HuffNodes[],int range,int *s1,int *s2){
 
 }
 
-//¹¹ÔìÒ»¿ÃHuffmanÊ÷£¬Ê÷½áµã´æ·ÅÔÚHuffNodesÖĞ
+//æ„é€ ä¸€æ£µHuffmanæ ‘ï¼Œæ ‘ç»“ç‚¹å­˜æ”¾åœ¨HuffNodesä¸­
 void HuffmanTree(HNodeType HuffNodes[], float weight[], int n){
 
     if(n>MAXLEAF) {
-    	printf("³¬³öÒ¶½áµã×î´óÊıÁ¿!\n");
+    	printf("è¶…å‡ºå¶ç»“ç‚¹æœ€å¤§æ•°é‡!\n");
     	return;
 	}
 	if(n<=1) return;
 
-	int m = 2*n-1;//½áµã×Ü¸öÊı
+	int m = 2*n-1;//ç»“ç‚¹æ€»ä¸ªæ•°
 
 	int node_index = 0;
-	//¹¹Ôì¸÷Ò¶½Úµã
+	//æ„é€ å„å¶èŠ‚ç‚¹
 	for(;node_index < n;node_index++){
 	/*
 		HuffNodes[node_index]->weight
@@ -99,7 +99,7 @@ void HuffmanTree(HNodeType HuffNodes[], float weight[], int n){
 		HuffNodes[node_index].lchild = -1;
 		HuffNodes[node_index].rchild = -1;
 	}
-	//¹¹Ôì·ÇÒ¶½Úµã
+	//æ„é€ éå¶èŠ‚ç‚¹
 	for(;node_index<m;node_index++){
 		HuffNodes[node_index].weight = 0;
 		HuffNodes[node_index].parent = -1;
@@ -107,9 +107,9 @@ void HuffmanTree(HNodeType HuffNodes[], float weight[], int n){
 		HuffNodes[node_index].rchild = -1;
 	}
 
-	//¹¹½¨Huffmantree
+	//æ„å»ºHuffmantree
 
-	int s1,s2,i;//×îĞ¡ÖµË÷Òı
+	int s1,s2,i;//æœ€å°å€¼ç´¢å¼•
 
 	for(i = n;i < m;i++) {
 		select(HuffNodes,i-1,&s1,&s2);
@@ -123,7 +123,7 @@ void HuffmanTree(HNodeType HuffNodes[], float weight[], int n){
 }
 
 void HuffmanCode(HNodeType HuffNodes[], HCodeType HuffCodes[], int n) {
-    //Éú³ÉHuffman±àÂë£¬Huffman±àÂë´æ·ÅÔÚHuffCodesÖĞ
+    //ç”ŸæˆHuffmanç¼–ç ï¼ŒHuffmanç¼–ç å­˜æ”¾åœ¨HuffCodesä¸­
     int start,i,c,f;
 	for(i =0 ;i<n;i++){
 		start = n-2;
@@ -136,8 +136,8 @@ void HuffmanCode(HNodeType HuffNodes[], HCodeType HuffCodes[], int n) {
 }
 /*
 int MidOrderTraverse(HNodeType HuffNodes[], float result[], int root, int resultIndex) {
-    //HuffmanÊ÷µÄÖĞĞò±éÀú£¬±éÀú½á¹û´æ·ÅÔÚresultÖĞ£¬·µ»ØÏÂÒ»¸öresultÎ»ÖÃË÷Òı
-    //¸ù½Úµã Îªroot
+    //Huffmanæ ‘çš„ä¸­åºéå†ï¼Œéå†ç»“æœå­˜æ”¾åœ¨resultä¸­ï¼Œè¿”å›ä¸‹ä¸€ä¸ªresultä½ç½®ç´¢å¼•
+    //æ ¹èŠ‚ç‚¹ ä¸ºroot
 
 	if (root!=-1){
 		resultIndex = MidOrderTraverse( HuffNodes,result,HuffNodes[root].lchild,resultIndex);
@@ -150,23 +150,23 @@ int MidOrderTraverse(HNodeType HuffNodes[], float result[], int root, int result
 */
 int main(){
 
-    HNodeType HuffNodes[MAXNODE];   // ¶¨ÒåÒ»¸ö½áµã½á¹¹ÌåÊı×é
-    HCodeType HuffCodes[MAXLEAF];   // ¶¨ÒåÒ»¸ö±àÂë½á¹¹ÌåÊı×é
+    HNodeType HuffNodes[MAXNODE];   // å®šä¹‰ä¸€ä¸ªç»“ç‚¹ç»“æ„ä½“æ•°ç»„
+    HCodeType HuffCodes[MAXLEAF];   // å®šä¹‰ä¸€ä¸ªç¼–ç ç»“æ„ä½“æ•°ç»„
     char text[MAXVALUE+1], ch[]="ATGCN";
     float weight[MAXLEAF], result[MAXNODE];
     int i, j, k, n, resultIndex;
     FILE *fp1,*fp2;
-    fp1=fopen("randomSeq.txt","r");//ÊäÈë²âÊÔÎÄ¼ş
+    fp1=fopen("randomSeq.txt","r");//è¾“å…¥æµ‹è¯•æ–‡ä»¶
     fp2=fopen("huffmanSeq.txt","w+");
 
     while(fgets(text,1000,fp1)!=NULL)
     {
         if(text[0]!='>')
         {
-            //×Ö·û×ÜÊın
+            //å­—ç¬¦æ€»æ•°n
             n = TextStatistics(text, weight);
 
-            // Êä³ö¹ş·òÂü±àÂë
+            // è¾“å‡ºå“ˆå¤«æ›¼ç¼–ç 
             HuffmanTree(HuffNodes, weight, n);
             HuffmanCode(HuffNodes, HuffCodes, n);
 
@@ -200,9 +200,9 @@ int main(){
         }
     }
     /*
-    // Êä³öHuffmanÊ÷µÄÖĞĞò±éÀú½á¹û
+    // è¾“å‡ºHuffmanæ ‘çš„ä¸­åºéå†ç»“æœ
     resultIndex = MidOrderTraverse(HuffNodes, result, 2*n-2, 0);
-    printf("\nHuffmanÊ÷µÄÖĞĞò±éÀú½á¹ûÊÇ£º");
+    printf("\nHuffmanæ ‘çš„ä¸­åºéå†ç»“æœæ˜¯ï¼š");
 
     for (i=0; i<resultIndex; i++)
         if (i < resultIndex-1)
